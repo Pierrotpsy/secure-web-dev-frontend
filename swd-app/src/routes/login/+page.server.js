@@ -1,30 +1,30 @@
-import { fail, redirect } from '@sveltejs/kit';
-import * as api from '../../api-link.js';
+import { error, redirect } from "@sveltejs/kit";
+import * as api from "../../api-link";
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ parent }) {
-    const { utilisateur } = await parent();
-    if (utilisateur) throw redirect(307, '/');
-}
+export async function load() {}
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-    default: async ({ cookies, request }) => {
-        const data = await request.formData();
-        console.log("succeeded fetching local data")
-        const utilisateur = {
-            username: data.get('username'),
-            password: data.get('password')
-        };
-        console.log(utilisateur)
-        const body = await api.post('users/login', utilisateur);
+  default: async ({ request, cookies }) => {
+    try {
+      const data = await request.formData();
+      const user = {
+        username: data.get("username"),
+        password: data.get("password")
+      }
+      const token = await api.loginUser(user)
+      const jwtpayload = JSON.parse(atob(token.jwt.split(".")[1]));
 
-        if (body.errors) {
-            return fail(401, body);
-        }
-        const value = body.jwt;
-        cookies.set('jwt', value, { path: '/' });
+      cookies.set("jwt", token.jwt);
+      cookies.set("role", jwtpayload.role);
 
-        throw redirect(307, '/');
+      console.log(cookies.get("jwt"))
+    } catch {
+      //reset les cookies en cas de probleme
+      cookies.set("jwt");
+      cookies.set("role");
     }
+    //throw redirect(302, "/locations");
+  },
 };

@@ -1,59 +1,112 @@
-import { error, redirect } from '@sveltejs/kit';
+const API_URL = "http://localhost:3000";
 
-const API_URL = "http://localhost:3000"
-
-async function callAPI({method, path, data, token}) {
-    const request = {method, headers: {}}
-
-    if(data) {
-        request.headers["Content-Type"] = "application/json"
-        request.body = JSON.stringify(data)
-    }
-
-    if(token) {
-        request.headers['Authorization'] = `Bearer ${token}`
-    }
-    console.log(request)
-    const response = await fetch(`${API_URL}/${path}`, request)
-
-    return response.json
-
-    throw error(res.status);
+export async function loginUser(user) {
+    try {
+        const request = {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                username: user.username,
+                password: user.password,
+            }),
+        }
+        const response = await fetch(`${API_URL}/users/login`, request);
+        return response.json()
+  } catch (error) {
+        console.log(error);
+  }
 }
 
-async function send({ method, path, data, token }) {
-    const opts = { method, headers: {} };
-
-    if (data) {
-        opts.headers['Content-Type'] = 'application/json';
-        opts.body = JSON.stringify(data);
-    }
-
-    if (token) {
-        opts.headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    const res = await fetch(`${base}/${path}`, opts);
-    if (res.ok || res.status === 422) {
-        const text = await res.text();
-        return text ? JSON.parse(text) : {};
-    }
-
-    throw error(res.status);
+export async function registerUser(user) {
+  try {
+    const response = await fetch(`${API_URL}/users/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: user.username,
+        password: user.password,
+      }),
+    });
+    return response.json()
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-export function get(path, token) {
-    return callAPI({ method: 'GET', path, token });
+export async function getAllLocations(JWT_TOKEN) {
+  try {
+    const response = await fetch(`${API_URL}/locations/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + JWT_TOKEN,
+      },
+    });
+    return fetchJSON(response);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-export function del(path, token) {
-    return callAPI({ method: 'DELETE', path, token });
+export async function deleteLocation(locationId, JWT_TOKEN) {
+  try {
+    await fetch(`${API_URL}/locations/${locationId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + JWT_TOKEN,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-export function post(path, data, token) {
-    return callAPI({ method: 'POST', path, data, token });
+export async function createLocation(location, JWT_TOKEN) {
+  try {
+    const response = await fetch(`${API_URL}/locations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + JWT_TOKEN,
+      },
+      body: JSON.stringify({
+        filmName: location.filmName,
+        filmType: location.filmType,
+        filmProducerName: location.filmProducerName,
+        filmDirectorName: location.filmDirectorName,
+        address: location.address,
+        year: location.year,
+      }),
+    });
+    return fetchJSON(response);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-export function patch(path, data, token) {
-    return callAPI({ method: 'PATCH', path, data, token });
+export async function updateLocation(locationId, JWT_TOKEN, location) {
+  try {
+    const response = await fetch(`${API_URL}/locations/${locationId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + JWT_TOKEN,
+      },
+      body: JSON.stringify({
+        filmType: location.filmType,
+        filmProducerName: location.filmProducerName,
+        filmDirectorName: location.filmDirectorName,
+        address: location.address,
+        year: location.year,
+      }),
+    });
+    return fetchJSON(response);
+  } catch (error) {
+    console.error(error);
+  }
 }
