@@ -7,10 +7,8 @@
     let showDetails = false;
     
     async function deleteLocation() {
-      console.log(location._id)
-      console.log(jwt)
       await api.deleteLocation(location._id, jwt)
-      //await invalidateAll()
+      await invalidateAll()
       window.location.reload()
     }
   
@@ -24,6 +22,7 @@
         year: document.getElementById("year").value,
       };
       await api.updateLocation(location._id, jwt, locationObject);
+      await invalidateAll()
       window.location.reload();
     }
 </script>
@@ -46,7 +45,11 @@
     <p id="location">{location.filmName}</p>
     {#if showDetails && modified}
       <div>
-        <input id="filmType" placeholder="Film type" value={location.filmType} />
+        <input 
+          id="filmType" 
+          placeholder="Film type" 
+          value={location.filmType} 
+        />
         <input
           id="filmProducerName"
           placeholder="Film producer name"
@@ -76,8 +79,16 @@
           placeholder="Film director name"
           value={location.filmDirectorName}
         />
-        <input id="address" placeholder="Address" value={location.address} />
-        <input id="year" placeholder="Year" value={location.year} />
+        <input 
+          id="address" 
+          placeholder="Address" 
+          value={location.address} 
+        />
+        <input 
+          id="year" 
+          placeholder="Year" 
+          value={location.year} 
+        />
         <button on:click={modifyLocation}>Save</button>
       </div>
     {:else if showDetails}

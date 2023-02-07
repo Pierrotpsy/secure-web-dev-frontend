@@ -38,13 +38,13 @@ export async function registerUser(user) {
   }
 }
 
-export async function getAllLocations(JWT_TOKEN) {
+export async function getAllLocations(jwt) {
   try {
 		const request = {
 			method: "GET",
 			headers: {
 			  "Content-Type": "application/json",
-			  Authorization: "Bearer " + JWT_TOKEN,
+			  Authorization: "Bearer " + jwt,
 			},
 		  }
 		const response = await fetch(`${API_URL}/locations/`, request)
@@ -54,31 +54,31 @@ export async function getAllLocations(JWT_TOKEN) {
   }
 }
 
-export async function deleteLocation(id, JWT_TOKEN) {
-  try {
+export async function deleteLocation(id, jwt) {
+  	try {
 		const request = {
 			method: "DELETE",
 			headers: {
 			  "Content-Type": "application/json",
-			  Authorization: "Bearer " + JWT_TOKEN,
+			  Authorization: "Bearer " + jwt,
 			},
 		  }
 		console.log(request)
 		console.log(id)
     	const response = await fetch(`${API_URL}/locations/${id}`, request)
 		console.log(response)
-  } catch (error) {
-    	console.error(error);
-  }
+	} catch (error) {
+		console.error(error);
+	}
 }
 
-export async function createLocation(location, JWT_TOKEN) {
+export async function createLocation(location, jwt) {
   try {
 		const request = {
 			method: "POST",
 			headers: {
 			  "Content-Type": "application/json",
-			  Authorization: "Bearer " + JWT_TOKEN,
+			  Authorization: "Bearer " + jwt,
 			},
 			body: JSON.stringify({
 			  filmName: location.filmName,
@@ -97,13 +97,13 @@ export async function createLocation(location, JWT_TOKEN) {
   }
 }
 
-export async function updateLocation(id, JWT_TOKEN, location) {
+export async function updateLocation(id, jwt, location) {
   try {
 		const request = {
 			method: "PATCH",
 			headers: {
 			  "Content-Type": "application/json",
-			  Authorization: "Bearer " + JWT_TOKEN,
+			  Authorization: "Bearer " + jwt,
 			},
 			body: JSON.stringify({
 			  filmType: location.filmType,

@@ -23,6 +23,6 @@ export const actions = {
       cookies.set("jwt");
       cookies.set("role");
     }
-    throw redirect(302, "/locations");
+    throw redirect(300, "/locations");
   },
 };
