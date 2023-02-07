@@ -14,17 +14,15 @@ export const actions = {
         password: data.get("password")
       }
       const token = await api.loginUser(user)
-      const jwtpayload = JSON.parse(atob(token.jwt.split(".")[1]));
+      const jwtContent = JSON.parse(atob(token.jwt.split(".")[1]));
 
       cookies.set("jwt", token.jwt);
-      cookies.set("role", jwtpayload.role);
+      cookies.set("role", jwtContent.role);
 
-      console.log(cookies.get("jwt"))
     } catch {
-      //reset les cookies en cas de probleme
       cookies.set("jwt");
       cookies.set("role");
     }
-    //throw redirect(302, "/locations");
+    throw redirect(302, "/locations");
   },
 };
