@@ -4,7 +4,6 @@ import * as api from "../../api-link.js";
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ cookies }) {
     try {
-		console.log("loading")
         const role = {value: cookies.get("role")}
         const jwt = {value: cookies.get("jwt")}
 

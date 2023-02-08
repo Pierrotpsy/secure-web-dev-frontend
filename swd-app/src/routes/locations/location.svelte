@@ -8,7 +8,7 @@
     
     async function deleteLocation() {
       await api.deleteLocation(location._id, jwt)
-      await invalidateAll()
+      //await invalidateAll()
       window.location.reload()
     }
   
@@ -22,7 +22,7 @@
         year: document.getElementById("year").value,
       };
       await api.updateLocation(location._id, jwt, locationObject);
-      await invalidateAll()
+      //await invalidateAll()
       window.location.reload();
     }
 </script>
