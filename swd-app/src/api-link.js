@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000";
+const API_URL = "https://pierrotpsy-backend.onrender.com";
 
 export async function loginUser(user) {
     try {
