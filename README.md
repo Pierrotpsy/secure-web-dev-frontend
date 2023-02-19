@@ -1,4 +1,4 @@
-##How to use
+## How to use
 
 First set up the secure-web-dev-backend part of the project. Then :
 
